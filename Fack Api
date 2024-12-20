@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data Example</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <table border="1" id="users">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="3">No records</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <button class="fetchdata">Fetch Data</button>
+
+    <script>
+        jQuery(document).ready(function() {
+            jQuery(".fetchdata").click(function() {
+                jQuery.ajax({
+                    url: 'https://dummyjson.com/users',
+                    type: 'GET',
+                    success: function(response) {
+                        let tbody_rows = '';
+                        
+                        for (let user of response.users) {
+                            tbody_rows += `
+                                <tr>
+                                    <td>${user.firstName}</td>
+                                    <td>${user.maidenName || 'N/A'}</td>
+                                    <td>${user.lastName}</td>
+                                </tr>
+                            `;
+                        }
+
+                        jQuery('#users tbody').html(tbody_rows);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
