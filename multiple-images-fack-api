@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        table {
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+        .btn-load {
+            margin-bottom: 20px;
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-load:hover {
+            background-color: #0056b3;
+        }
+        .table img {
+            width: 25%;
+            border-radius: 50%;
+        }
+        .table th {
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">Product List</h1>
+    <button class="btn btn-load btn-lg btn-block randam">Load Products</button>
+    <table class="table table-striped" id="products">
+        <thead>
+            <tr>
+                <th>Images</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery(".randam").click(function(){
+            jQuery.ajax({
+                url: 'https://dummyjson.com/products',
+                type: 'GET',
+                success: function(response) {
+                    let tbody_rows = '';
+                    
+                    for (let product of response.products) {
+                        let all_images = '';
+                        for (let image of product.images) {
+                            all_images += `<img src="${image}" alt="product image">`;
+                        }
+
+                        tbody_rows += `
+                            <tr>
+                                <td>${all_images}</td>
+                                <td>${product.title}</td>
+                                <td>${product.price}</td>
+                                <td>${product.category}</td>
+                                <td>${product.brand}</td>
+                                <td>${product.stock}</td>
+                            </tr>
+                        `;
+                    }
+
+                    // Add rows to the table
+                    jQuery('#products tbody').html(tbody_rows);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
